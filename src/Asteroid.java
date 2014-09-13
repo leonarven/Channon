@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.media.opengl.GL2;
+import org.lwjgl.opengl.GL11;
 
 
 public class Asteroid extends Entity {
@@ -21,12 +21,12 @@ public class Asteroid extends Entity {
 		}
 	}
 	
-	public void draw(GL2 gl) {
-		gl.glColor3f(1.0f, 1.0f, 1.0f);
-		gl.glBegin(GL2.GL_POLYGON);
+	public void draw() {
+		GL11.glColor3f(1.0f, 1.0f, 1.0f);
+		GL11.glBegin(GL11.GL_POLYGON);
 		for(Point point : corners) {
-			gl.glVertex3d(this.x()+point.x(), this.y()+point.y(), this.z()+point.z());
+			GL11.glVertex3d(this.x()+point.x(), this.y()+point.y(), this.z()+point.z());
 		}
-		gl.glEnd();
+		GL11.glEnd();
 	}
 }

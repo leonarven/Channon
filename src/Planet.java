@@ -1,10 +1,12 @@
-import javax.media.opengl.GL2;
-
+import org.lwjgl.opengl.GL11;
 
 public class Planet extends Entity {
 
-	@Override
-	public void draw(GL2 gl) {
-		
+	
+	public void draw() {
+		GL11.glBegin(GL11.GL_LINE_LOOP);
+		for(double i = 0.0; i < 2*Math.PI; i+= 0.2)
+			GL11.glVertex3d(this.x() + this.size * Math.cos(i), this.y() + this.size * Math.sin(i), this.z());
+		GL11.glEnd();
 	}
 }

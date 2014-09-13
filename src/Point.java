@@ -1,6 +1,7 @@
 import java.nio.IntBuffer;
 import java.nio.FloatBuffer;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 
 
 public class Point {
@@ -55,21 +56,17 @@ public class Point {
 	}
 	
 	public int[] screen2D() {
-/*		FloatBuffer screenCoords = BufferUtils.createFloatBuffer(4);
+		FloatBuffer screenCoords = BufferUtils.createFloatBuffer(4);
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
 		FloatBuffer modelView = BufferUtils.createFloatBuffer(16);
 		FloatBuffer projection = BufferUtils.createFloatBuffer(16);
-		// int[] screenCoords = new double[4];
-		// int[] viewport = new int[4];
-		// double[] modelView = new double[16];
-		// double[] projection = new double[16];
+
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, modelView);
 		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projection);
 		GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
-		boolean result = Channon.glu.gluProject((float) x, (float) y, (float) z, modelView, projection, viewport, screenCoords);
-		if (result) {
-		    return new int[] { (int) screenCoords.get(3), (int) screenCoords.get(1) };
-		}*/
+		boolean result = GLU.gluProject((float) x, (float) y, (float) z, modelView, projection, viewport, screenCoords);
+		if (result) 
+		    return new int[] { (int) screenCoords.get(0), (int) screenCoords.get(1) };
 		return null;
 	}
 }

@@ -1,4 +1,4 @@
-import javax.media.opengl.GL2;
+import org.lwjgl.opengl.GL11;
 
 public class Force {
 
@@ -31,11 +31,11 @@ public class Force {
 		return new Force(f.yPlus * a , f.xPlus * a);
 	}
 
-	public void draw(GL2 gl, Point p) {
-		gl.glBegin(GL2.GL_LINE_LOOP);
-		 gl.glVertex3d(p.x(), p.y(), p.z());
-		 gl.glVertex3d(p.x() + this.xPlus, p.y() + this.yPlus, p.z());
-		gl.glEnd();
+	public void draw(Point p) {
+		GL11.glBegin(GL11.GL_LINE_LOOP);
+		GL11.glVertex3d(p.x(), p.y(), p.z());
+		GL11.glVertex3d(p.x() + this.xPlus, p.y() + this.yPlus, p.z());
+		GL11.glEnd();
 	}
 	
 }

@@ -1,7 +1,6 @@
-import javax.media.opengl.GL2;
-
+import org.lwjgl.opengl.GL11;
 
 public interface Drawable {
 
-	public void draw(GL2 gl);
+	public void draw();
 }

@@ -1,5 +1,4 @@
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
+import org.lwjgl.opengl.GL11;
 
 
 public class Spaceship extends Entity {
@@ -17,14 +16,14 @@ public class Spaceship extends Entity {
 		
 	}
 	
-	public void draw(GL2 gl) {
+	public void draw() {
 		double a = 2.3;
 		double r = 0.3;
-		gl.glBegin(GL.GL_LINE_LOOP);
-		 gl.glVertex3d(this.x()+Math.cos(this.rotation)*r, this.y()+Math.sin(this.rotation)*r, 0);
-		 gl.glVertex3d(this.x()+Math.cos(this.rotation+a)*r, this.y()+Math.sin(this.rotation+a)*r, 0);
-		 gl.glVertex3d(this.x()+Math.cos(this.rotation-a)*r, this.y()+Math.sin(this.rotation-a)*r, 0);
-		gl.glEnd();
+		GL11.glBegin(GL11.GL_LINE_LOOP);
+		GL11.glVertex3d(this.x()+Math.cos(this.rotation)*r, this.y()+Math.sin(this.rotation)*r, 0);
+		GL11.glVertex3d(this.x()+Math.cos(this.rotation+a)*r, this.y()+Math.sin(this.rotation+a)*r, 0);
+		GL11.glVertex3d(this.x()+Math.cos(this.rotation-a)*r, this.y()+Math.sin(this.rotation-a)*r, 0);
+		GL11.glEnd();
 	}
 	
 	public void move(double a) {
