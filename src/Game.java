@@ -70,6 +70,8 @@ public class Game implements Drawable {
 		this.player.addForceTowards(0, 0 , 0.001);
 		this.player.update();
 
+		this.particleHandler.update();
+
 		this.camera.x(this.player.x());
 		this.camera.y(this.player.y());
 		
@@ -90,6 +92,7 @@ public class Game implements Drawable {
 			planet.draw();
 		}
 		this.player.draw();
+		this.particleHandler.draw();
 	}
 	
 	public void pollInput() {
@@ -106,6 +109,8 @@ public class Game implements Drawable {
 	
 			this.player.addForce(Force.towards(xp, yp), 0.002);
 			this.player.rotation = Math.atan2(yp, xp);
+			this.particleHandler.addParticle(new SmokeParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
+			
 		}
 	
 		/* game.player:n liikkuminen */
