@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
+
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -7,11 +9,14 @@ import org.lwjgl.input.Mouse;
 
 public class Game implements Drawable {
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
+
 	public ArrayList<Star> stars = new ArrayList<Star>();
 	public ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
+	public ArrayList<Planet> planets = new ArrayList<Planet>();
 	
 	public Player player;
 	public Camera camera;
+	public ParticleHandler particleHandler = new ParticleHandler();
 	
 	public double theFactor;
 	
@@ -49,6 +54,10 @@ public class Game implements Drawable {
 			this.asteroids.add(asteroid);
 			this.entities.add(asteroid);
 		}
+		Planet planet = new Planet(4, 2);
+		planet.pos(0, 0);
+		this.planets.add(planet);
+		this.entities.add(planet);
 	}
 	
 	public void update() {
@@ -74,22 +83,29 @@ public class Game implements Drawable {
 		for(Star star : this.stars) {
 			star.draw();
 		}
-		for(Entity entity : this.entities) {
-			entity.draw();
+		for(Asteroid asteroid: this.asteroids) {
+			asteroid.draw();
 		}
+		for(Planet planet: this.planets) {
+			planet.draw();
+		}
+		this.player.draw();
 	}
 	
 	public void pollInput() {
-		
+
+		/* Hiiren vasen nappi */
 		if (Mouse.isButtonDown(0)) {
-			int x = Mouse.getX();
-			int y = Mouse.getY();
-	
-			System.out.println("MOUSE DOWN @ X: " + x + " Y: " + y);
+			System.out.println("MOUSE DOWN @ X: " + Mouse.getX() + " Y: " + Mouse.getY());
 		}
+		
+		/* Hiiren oikea nappi */
+		if (Mouse.isButtonDown(1)) {
+			double xp = 2.0*(double)Mouse.getX()/(double)Display.getWidth()-1.0;
+			double yp = 2.0*(double)Mouse.getY()/(double)Display.getHeight()-1.0;
 	
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			System.out.println("SPACE KEY IS DOWN");
+			this.player.addForce(Force.towards(xp, yp), 0.002);
+			this.player.rotation = Math.atan2(yp, xp);
 		}
 	
 		/* game.player:n liikkuminen */

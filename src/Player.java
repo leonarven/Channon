@@ -14,8 +14,5 @@ public class Player extends Spaceship {
 			GL11.glVertex3d(this.x()+1.0*Math.cos(aToOrigo), this.y()+1.0*Math.sin(aToOrigo), this.z());
 			GL11.glEnd();
 		}
-		
-		this.mov.draw((Point)this);
 	}
-	
 }

@@ -1,4 +1,8 @@
+import java.util.TimerTask;
+import java.util.Timer;
+
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -7,6 +11,15 @@ import org.lwjgl.util.glu.GLU;
 public class Channon {
 	
 	public Game game;
+	
+	public static int _t = 0;
+	public static int _frames = 0;
+	public static int FPS = 0;
+	
+	public static TimerTask updateFPS;
+	public static Timer timer = new Timer();
+	
+	public static boolean finished = false;
 
 	public void init(int width, int height) {
 		try {
@@ -28,6 +41,15 @@ public class Channon {
 		
 		game = new Game();
 		game.init();
+		
+		Channon.updateFPS = new TimerTask() {
+			public void run() {
+				Display.setTitle("FPS:"+(Channon.FPS=Channon._frames));
+				Channon._frames = 0;
+			}
+		};
+		
+		timer.scheduleAtFixedRate(Channon.updateFPS, 1000, 1000);
 	}
 
 	public void reshape() {
@@ -45,74 +67,37 @@ public class Channon {
 	
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
+		
+		GL11.glClearDepth(1.0f);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		GL11.glFrontFace(GL11.GL_CW);
+//		GL11.glCullFace(GL11.GL_FRONT);
+//		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glLoadIdentity();
+
 	}
 	
 	public void start() {
 
-		while (!Display.isCloseRequested()) {
+		while (!Channon.finished) {
 
+			if (Display.isCloseRequested() || Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) Channon.finished = true;
+			
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);	
-			GL11.glClearDepth(1.0f);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glDepthFunc(GL11.GL_LEQUAL);
-			GL11.glFrontFace(GL11.GL_CW);
-//			GL11.glCullFace(GL11.GL_FRONT);
-//			GL11.glEnable(GL11.GL_CULL_FACE);
 			GL11.glLoadIdentity();
 			
-			game.update();
-			
-			game.draw();
-
-			GL11.glBegin(GL11.GL_LINE_LOOP);
-			GL11.glColor3f(0.0f, 1.0f, 0.0f);
-			GL11.glVertex3f(1.0f, 1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(1.0f, 1.0f, 1.0f);
-			GL11.glEnd();
-			GL11.glBegin(GL11.GL_LINE_LOOP);
-			GL11.glColor3f(1.0f, 0.5f, 0.0f);
-			GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
-			GL11.glVertex3f(1.0f, -1.0f, -1.0f);
-			GL11.glEnd();
-			GL11.glBegin(GL11.GL_LINE_LOOP);
-			GL11.glColor3f(1.0f, 0.0f, 0.0f);
-			GL11.glVertex3f(1.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-			GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-			GL11.glEnd();
-			GL11.glBegin(GL11.GL_LINE_LOOP);
-			GL11.glColor3f(1.0f, 1.0f, 0.0f);
-			GL11.glVertex3f(1.0f, -1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
-			GL11.glVertex3f(1.0f, 1.0f, -1.0f);
-			GL11.glEnd();
-			GL11.glBegin(GL11.GL_LINE_LOOP);
-			GL11.glColor3f(0.0f, 0.0f, 1.0f);  
-			GL11.glVertex3f(-1.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(-1.0f, 1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, -1.0f);
-			GL11.glVertex3f(-1.0f, -1.0f, 1.0f);
-			GL11.glEnd();
-			GL11.glBegin(GL11.GL_LINE_LOOP);
-			GL11.glColor3f(1.0f, 0.0f, 1.0f);
-			GL11.glVertex3f(1.0f, 1.0f, -1.0f);
-			GL11.glVertex3f(1.0f, 1.0f, 1.0f);
-			GL11.glVertex3f(1.0f, -1.0f, 1.0f);
-			GL11.glVertex3f(1.0f, -1.0f, -1.0f);
-			GL11.glEnd();
-			
 			game.pollInput();
+			game.update();
+			game.draw();
 			
 			Display.update();
-	
+			Display.sync(60);
+
+			Channon._t++;
+			Channon._frames++;
 		}
-	 
+		
 		Display.destroy();
 	}
 	

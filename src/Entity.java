@@ -1,15 +1,8 @@
 
 abstract class Entity extends Point implements Drawable {
 	double size;
-	
-//	double angle, velocity;
-	
 	Force mov;
-	
 	double mass;
-	
-	double xPlus, yPlus;
-
 	double rotation, rotationPlus;
 	
 	public Entity() {
@@ -28,8 +21,8 @@ abstract class Entity extends Point implements Drawable {
 	public void addForceTowards(double x, double y) {
 		addForceTowards(x, y, 1);
 	}
+	
 	public void addForceTowards(double x, double y, double a) {
-//		double a = Math.atan2(y - this.y(), x - this.x());
 		double d = Math.sqrt(Math.pow(y - this.y(), 2) + Math.pow(x - this.x(), 2));
 		addForce(new Force((x - this.x())/d, (y - this.y())/d, a));
 	}
@@ -37,7 +30,9 @@ abstract class Entity extends Point implements Drawable {
 	public void update() {
 		this.moveX(this.mov.xPlus);
 		this.moveY(this.mov.yPlus);
-		
-		
+	}
+	
+	public void draw() {
+		this.mov.draw(this);
 	}
 }
