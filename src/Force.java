@@ -19,7 +19,13 @@ public class Force {
 	public Force opposite() {
 		return new Force(-this.xPlus, -this.yPlus);
 	}
+	public Force perpendicular() {
+		double a = 1;
+		return new Force(this.yPlus * a , this.xPlus * a);
+	}
 
+	
+	
 	static public Force towards(double x, double y) {
 		double d = Math.sqrt(Math.pow(y, 2) + Math.pow(x, 2));
 		return new Force(x/d, y/d);
@@ -30,6 +36,8 @@ public class Force {
 	static public Force perpendicular(Force f, double a) {
 		return new Force(f.yPlus * a , f.xPlus * a);
 	}
+	
+	
 
 	public void draw(Point p) {
 		GL11.glBegin(GL11.GL_LINE_LOOP);
@@ -37,5 +45,8 @@ public class Force {
 		GL11.glVertex3d(p.x() + this.xPlus, p.y() + this.yPlus, p.z());
 		GL11.glEnd();
 	}
-	
+	@Override
+	public String toString() {
+		return "xp:"+xPlus+",yp:"+yPlus;
+	}
 }

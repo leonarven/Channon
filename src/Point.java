@@ -69,4 +69,9 @@ public class Point {
 		    return new int[] { (int) screenCoords.get(0), (int) screenCoords.get(1) };
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		return "("+x()+","+y()+","+z()+")";
+	}
 }

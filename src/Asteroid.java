@@ -22,11 +22,14 @@ public class Asteroid extends Entity {
 	}
 	
 	public void draw() {
-		GL11.glColor3f(1.0f, 1.0f, 1.0f);
-		GL11.glBegin(GL11.GL_POLYGON);
-		for(Point point : corners) {
+		super.draw();
+		GL11.glColor3d(1.0, 1.0, 1.0);
+		GL11.glBegin(GL11.GL_LINE_LOOP);
+		for(Point point : corners)
 			GL11.glVertex3d(this.x()+point.x(), this.y()+point.y(), this.z()+point.z());
-		}
 		GL11.glEnd();
+	}
+	public void update() {
+		super.update();
 	}
 }

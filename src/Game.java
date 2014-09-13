@@ -23,51 +23,59 @@ public class Game implements Drawable {
 	public Game() {
 		
 		this.theFactor = 1;
-		
-		double a = new Random().nextDouble();
-		
-		player = new Player();
-		this.entities.add(player);
-		player.pos(5*Math.cos(a), 5*Math.sin(a));
+
 		camera = new Camera(0,0,-15);
 	}
 	
 	public void init() {
 		Random rand = new Random();
-		
+
+		player = new Player();
+		player.pos(5*Math.cos(rand.nextInt()), 5*Math.sin(rand.nextInt()));
+		this.entities.add(player);
+
 		for(int i = 0; i < 100000; i++) {
 			Star star = new Star();
 			star.pos(rand.nextDouble()*800-400, rand.nextDouble()*800-400, -rand.nextDouble()*10);
 			this.stars.add(star);
 		}
 		for(int i = 0; i < 100; i++) {
-			double a = rand.nextDouble()*Math.PI*2;
 			Asteroid asteroid = new Asteroid(0.1 + 0.3*rand.nextDouble(), 4+(int)(5*rand.nextDouble()));
-			asteroid.pos((30+5*rand.nextDouble())*Math.cos(a), (30+5*rand.nextDouble())*Math.sin(a));
-//			asteroid.addForce(new Force((new Random().nextDouble()-0.5), (new Random().nextDouble()-0.5),0.002));
 
-			asteroid.addForce(Force.towards(0, 0));
-
+			double a = rand.nextDouble()*Math.PI*2;
+			double x = (10+5*rand.nextDouble())*Math.cos(a);
+			double y = (10+5*rand.nextDouble())*Math.sin(a);
+			double z = 0.0+rand.nextDouble();
+			asteroid.pos(x, y, z);
 			
-			
-			asteroid.update();
+//			asteroid.addForce(Force.towards(0, 0).perpendicular());
 			this.asteroids.add(asteroid);
 			this.entities.add(asteroid);
+			
 		}
-		Planet planet = new Planet(4, 2);
-		planet.pos(0, 0);
-		this.planets.add(planet);
-		this.entities.add(planet);
+		
+		Planet planet1 = new Planet(4, 2);
+		Planet planet2 = new Planet(4, 2);
+
+		planet1.pos(0, 0);
+		planet2.pos(5, 5);
+		
+		this.planets.add(planet1);
+		this.planets.add(planet2);
+		this.entities.add(planet1);
+		this.entities.add(planet2);
 	}
 	
 	public void update() {
 
 		for(Asteroid a : this.asteroids) {
-			a.addForceTowards(0, 0 , 0.001);
+			for(Planet planet : this.planets)
+				a.addForceTowards(planet.x(), planet.y() , 0.001);
 			a.update();
 		}
 		
-		this.player.addForceTowards(0, 0 , 0.001);
+		for(Planet planet : this.planets)
+			this.player.addForceTowards(planet.x(), planet.y() , 0.001);
 		this.player.update();
 
 		this.particleHandler.update();
