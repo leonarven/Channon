@@ -3,6 +3,11 @@ import org.lwjgl.opengl.GL11;
 
 public class Player extends Spaceship {
 
+	public Player() {
+		super();
+		this.mass = 1;
+	}
+	
 	public void draw() {
 		super.draw();
 		

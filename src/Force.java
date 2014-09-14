@@ -2,39 +2,60 @@ import org.lwjgl.opengl.GL11;
 
 public class Force {
 
+	static public final double G =  0.01;
+	
 	double xPlus;
 	double yPlus;
 
-	public Force(double x, double y) {
-		this.xPlus = x;
-		this.yPlus = y;
+	public Force(double xp, double yp) {
+		this.xPlus = xp;
+		this.yPlus = yp;
 	}
-	public Force(double x, double y, double a) {
-		this(x*a, y*a);
+	public Force(double xp, double yp, double a) {
+		this(xp*a, yp*a);
 	}
 	
 	public Force plus(Force f) {
-		return new Force(f.xPlus + this.xPlus, f.yPlus + this.yPlus);
+		return new Force(f.xPlus * Channon.speedFactor + this.xPlus, f.yPlus * Channon.speedFactor + this.yPlus);
 	}
 	public Force opposite() {
 		return new Force(-this.xPlus, -this.yPlus);
 	}
 	public Force perpendicular() {
-		double a = 1;
-		return new Force(this.yPlus * a , this.xPlus * a);
+		double a = Math.atan2(this.yPlus, this.xPlus)+Math.PI/2;
+		
+		return new Force(Math.cos(a) , Math.sin(a));
 	}
 
 	
 	
-	static public Force towards(double x, double y) {
+	static public Force towards(double x, double y, double a) {
 		double d = Math.sqrt(Math.pow(y, 2) + Math.pow(x, 2));
-		return new Force(x/d, y/d);
+		return new Force(x/d, y/d, a);
+	}
+	static public Force towards(double x, double y) {
+		return Force.towards(x, y, 1);
 	}
 	static public Force perpendicular(Force f) {
 		return Force.perpendicular(f, 1.0);
 	}
-	static public Force perpendicular(Force f, double a) {
-		return new Force(f.yPlus * a , f.xPlus * a);
+	static public Force perpendicular(Force f, double k) {
+		
+		double a = Math.atan2(f.yPlus, f.xPlus)+Math.PI/2;
+		
+		return new Force(Math.cos(a) * k , Math.sin(a) * k);
+	}
+	static public Force gravitation(Entity a, Entity b) {
+		if (a.mass == 0 || b.mass == 0) return new Force(0,0);
+		
+		double r = a.distance2D(b);
+		double cos = (a.x() - b.x());
+		double sin = (a.y() - b.y());
+
+		if (r <= 1) r = 1;
+		double F = Force.G * (a.mass * b.mass) / Math.pow(r, 2);
+		return new Force((cos / r) * F, (sin / r) * F);
+		
 	}
 	
 	

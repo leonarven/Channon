@@ -10,7 +10,7 @@ import org.lwjgl.util.glu.GLU;
 
 public class Channon {
 	
-	public Game game;
+	public static boolean DEBUG = true;
 	
 	public static int _t = 0;
 	public static int _frames = 0;
@@ -18,8 +18,12 @@ public class Channon {
 	
 	public static TimerTask updateFPS;
 	public static Timer timer = new Timer();
+
+	public static double speedFactor = 1;
 	
 	public static boolean finished = false;
+
+	public Game game;
 
 	public void init(int width, int height) {
 		try {
@@ -80,8 +84,11 @@ public class Channon {
 	
 	public void start() {
 
-		while (!Channon.finished) {
 
+		long time, startTime;
+		while (!Channon.finished) {
+			startTime = System.currentTimeMillis();
+			
 			if (Display.isCloseRequested() || Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) Channon.finished = true;
 			
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);	
@@ -92,18 +99,23 @@ public class Channon {
 			game.draw();
 			
 			Display.update();
-			Display.sync(60);
-
+//			Display.sync(60);
+			
 			Channon._t++;
 			Channon._frames++;
+
+			time = System.currentTimeMillis() - startTime;
+			Channon.speedFactor = time / 20.0;
+			
 		}
 		
 		Display.destroy();
+		System.exit(0);
 	}
 	
 	public static void main(String[] argv) {
 		Channon channon = new Channon();
-		channon.init(800, 600);
+		channon.init(1024, 768);
 		channon.start();
 	}
 }

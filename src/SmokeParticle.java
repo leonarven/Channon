@@ -18,8 +18,8 @@ public class SmokeParticle extends Particle {
 		GL11.glColor4d(this.color.r, this.color.g, this.color.b, this.color.a);
 		GL11.glBegin(GL11.GL_POINTS);
 		for(int i = 0; i < 10; i++)
-			GL11.glVertex3d(this.x() + rand.nextDouble()*this.size*Math.cos(rand.nextInt()),
-					        this.y() + rand.nextDouble()*this.size*Math.sin(rand.nextInt()),
+			GL11.glVertex3d(this.x() + rand.nextDouble()*(this.size+this.life/20.0)*Math.cos(rand.nextInt()),
+					        this.y() + rand.nextDouble()*(this.size+this.life/20.0)*Math.sin(rand.nextInt()),
 					        this.z());
 		GL11.glEnd();
 	}

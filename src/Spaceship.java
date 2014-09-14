@@ -2,6 +2,8 @@ import org.lwjgl.opengl.GL11;
 
 
 public class Spaceship extends Entity {
+	
+	public ArrayList
 
 	public void update() {
 		super.update();
@@ -15,11 +17,16 @@ public class Spaceship extends Entity {
 		
 	}
 	
+	public generateShip() {
+		
+	}
+	
 	public void draw() {
 		super.draw();
 		
 		double a = 2.3;
 		double r = 0.3;
+		GL11.glColor3d(1, 1, 1);
 		GL11.glBegin(GL11.GL_LINE_LOOP);
 		GL11.glVertex3d(this.x()+Math.cos(this.rotation)*r, this.y()+Math.sin(this.rotation)*r, 0);
 		GL11.glVertex3d(this.x()+Math.cos(this.rotation+a)*r, this.y()+Math.sin(this.rotation+a)*r, 0);

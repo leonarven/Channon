@@ -1,9 +1,13 @@
+import java.util.ArrayList;
+
+import org.lwjgl.opengl.GL11;
+
 
 abstract class Entity extends Point implements Drawable {
-	double size;
-	Force mov;
-	double mass;
-	double rotation, rotationPlus;
+	public double size, mass;
+	public double rotation, rotationPlus;
+	public Force mov;
+	public ArrayList<Force> forces = new ArrayList<Force>();
 	
 	public Entity() {
 		this.mov = new Force(0,0);
@@ -12,6 +16,7 @@ abstract class Entity extends Point implements Drawable {
 	
 	public void addForce(Force f) {
 		this.mov = this.mov.plus(f);
+		this.forces.add(f);
 	}
 
 	public void addForce(Force f, double a) {
@@ -28,11 +33,18 @@ abstract class Entity extends Point implements Drawable {
 	}
 	
 	public void update() {
-		this.moveX(this.mov.xPlus);
-		this.moveY(this.mov.yPlus);
+		this.moveX(this.mov.xPlus*Channon.speedFactor);
+		this.moveY(this.mov.yPlus*Channon.speedFactor);
+		this.forces.clear();
 	}
 	
 	public void draw() {
-		this.mov.draw(this);
+		if (Channon.DEBUG) {
+			GL11.glColor3d(1, 1, 0);
+			this.mov.draw(this);
+			
+			for(Force f : this.forces)
+				f.draw(this);
+		}
 	}
 }

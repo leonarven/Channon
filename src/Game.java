@@ -8,6 +8,7 @@ import org.lwjgl.input.Mouse;
 
 
 public class Game implements Drawable {
+
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
 
 	public ArrayList<Star> stars = new ArrayList<Star>();
@@ -24,7 +25,7 @@ public class Game implements Drawable {
 		
 		this.theFactor = 1;
 
-		camera = new Camera(0,0,-15);
+		camera = new Camera(0,0,-10);
 	}
 	
 	public void init() {
@@ -33,6 +34,15 @@ public class Game implements Drawable {
 		player = new Player();
 		player.pos(5*Math.cos(rand.nextInt()), 5*Math.sin(rand.nextInt()));
 		this.entities.add(player);
+		
+
+		Planet planet1 = new Planet(4, 2);
+
+		planet1.pos(0,0);
+		
+		this.planets.add(planet1);
+		this.entities.add(planet1);
+		
 
 		for(int i = 0; i < 100000; i++) {
 			Star star = new Star();
@@ -47,43 +57,36 @@ public class Game implements Drawable {
 			double y = (10+5*rand.nextDouble())*Math.sin(a);
 			double z = 0.0+rand.nextDouble();
 			asteroid.pos(x, y, z);
-			
-//			asteroid.addForce(Force.towards(0, 0).perpendicular());
+			asteroid.mass = 0.4;
+
+			for(Planet planet : this.planets) {
+				asteroid.addForce(Force.gravitation(planet, asteroid).perpendicular(),0.025);
+			}
 			this.asteroids.add(asteroid);
 			this.entities.add(asteroid);
 			
 		}
 		
-		Planet planet1 = new Planet(4, 2);
-		Planet planet2 = new Planet(4, 2);
-
-		planet1.pos(0, 0);
-		planet2.pos(5, 5);
-		
-		this.planets.add(planet1);
-		this.planets.add(planet2);
-		this.entities.add(planet1);
-		this.entities.add(planet2);
 	}
 	
 	public void update() {
 
-		for(Asteroid a : this.asteroids) {
-			for(Planet planet : this.planets)
-				a.addForceTowards(planet.x(), planet.y() , 0.001);
-			a.update();
+		for(Asteroid asteroid : this.asteroids) {
+			for(Planet planet : this.planets) {
+				asteroid.addForce(Force.gravitation(planet, asteroid));
+			}
+			asteroid.update();
 		}
 		
-		for(Planet planet : this.planets)
-			this.player.addForceTowards(planet.x(), planet.y() , 0.001);
+		for(Planet planet : this.planets) {
+			this.player.addForce(Force.gravitation(planet, player));
+		}
 		this.player.update();
 
 		this.particleHandler.update();
 
 		this.camera.x(this.player.x());
 		this.camera.y(this.player.y());
-		
-//		System.out.println("("+this.player.screen2D()[0]+","+this.player.screen2D()[1]+")");
 	}
 	
 	public void draw() {
@@ -118,12 +121,11 @@ public class Game implements Drawable {
 			this.player.addForce(Force.towards(xp, yp), 0.002);
 			this.player.rotation = Math.atan2(yp, xp);
 			this.particleHandler.addParticle(new SmokeParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
-			
 		}
 	
 		/* game.player:n liikkuminen */
-		if (Keyboard.isKeyDown(Keyboard.KEY_A)) this.player.rotationPlus =  0.005;
-		if (Keyboard.isKeyDown(Keyboard.KEY_D)) this.player.rotationPlus = -0.005;
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) this.player.rotationPlus =  0.02;
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) this.player.rotationPlus = -0.02;
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) this.player.move( 0.001);
 		if (Keyboard.isKeyDown(Keyboard.KEY_S)) this.player.move(-0.001);
 
@@ -135,24 +137,14 @@ public class Game implements Drawable {
 
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKeyState()) {
-				if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-					System.out.println("A Key Pressed");
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_S) {
-					System.out.println("S Key Pressed");
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_D) {
-					System.out.println("D Key Pressed");
+				if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
+					Channon.DEBUG = true;
+					System.out.println("DEBUG ON");
 				}
 			} else {
-				if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-					System.out.println("A Key Released");
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_S) {
-					System.out.println("S Key Released");
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_D) {
-					System.out.println("D Key Released");
+				if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
+					Channon.DEBUG = false;
+					System.out.println("DEBUG OFF");
 				}
 			}
 		}
