@@ -10,7 +10,7 @@ public class Star extends PointRGBA implements Drawable  {
 	}
 	
 	public void draw() {
-		GL11.glColor3d(this.r, this.g, this.b, this.a);
+		GL11.glColor4d(this.r, this.g, this.b, this.a);
 		GL11.glBegin(GL11.GL_POINTS);
 		GL11.glVertex3d(this.x(), this.y(), this.z());
 		GL11.glEnd();

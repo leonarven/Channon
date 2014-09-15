@@ -19,17 +19,20 @@ public class Asteroid extends Entity {
 			corners.add(new Point(Math.cos(rad) * a, Math.sin(rad) * a));
 			a += (new Random().nextDouble()-0.5)*0.2;
 		}
+		this.rotationPlus = new Random().nextDouble();
 	}
 	
 	public void draw() {
+		GL11.glRotated(this.rotation, 0, 0, 1);
 		super.draw();
 		GL11.glColor3d(1.0, 1.0, 1.0);
 		GL11.glBegin(GL11.GL_LINE_LOOP);
 		for(Point point : corners)
-			GL11.glVertex3d(this.x()+point.x(), this.y()+point.y(), this.z()+point.z());
+			GL11.glVertex3d(point.x(), point.y(), point.z());
 		GL11.glEnd();
 	}
 	public void update() {
 		super.update();
+		this.rotation = Channon._t;
 	}
 }

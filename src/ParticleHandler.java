@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 public class ParticleHandler {
 	public ArrayList<Particle> particles = new ArrayList<Particle>();
+	public ArrayList<TraceTrailParticle> traceTrails = new ArrayList<TraceTrailParticle>();
 	
 	public void addParticle(Particle particle) {
 		this.particles.add(particle);

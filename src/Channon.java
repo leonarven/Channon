@@ -23,7 +23,7 @@ public class Channon {
 	
 	public static boolean finished = false;
 
-	public Game game;
+	public static Game game;
 
 	public void init(int width, int height) {
 		try {
@@ -43,8 +43,8 @@ public class Channon {
 	 
 		this.reshape();
 		
-		game = new Game();
-		game.init();
+		Channon.game = new Game();
+		Channon.game.init();
 		
 		Channon.updateFPS = new TimerTask() {
 			public void run() {
@@ -93,10 +93,12 @@ public class Channon {
 			
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);	
 			GL11.glLoadIdentity();
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			
-			game.pollInput();
-			game.update();
-			game.draw();
+			Channon.game.pollInput();
+			Channon.game.update();
+			Channon.game.draw();
 			
 			Display.update();
 //			Display.sync(60);

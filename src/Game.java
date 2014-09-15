@@ -19,22 +19,17 @@ public class Game implements Drawable {
 	public Camera camera;
 	public ParticleHandler particleHandler = new ParticleHandler();
 	
-	public double theFactor;
-	
-	public Game() {
-		
-		this.theFactor = 1;
-
-		camera = new Camera(0,0,-10);
-	}
+	public double theFactor = 1;
 	
 	public void init() {
 		Random rand = new Random();
 
 		player = new Player();
 		player.pos(5*Math.cos(rand.nextInt()), 5*Math.sin(rand.nextInt()));
+	//	player.pos(1,1);
 		this.entities.add(player);
-		
+
+		Camera.z(-10);
 
 		Planet planet1 = new Planet(4, 2);
 
@@ -85,32 +80,41 @@ public class Game implements Drawable {
 
 		this.particleHandler.update();
 
-		this.camera.x(this.player.x());
-		this.camera.y(this.player.y());
+		Camera.x(this.player.x());
+		Camera.y(this.player.y());
 	}
 	
 	public void draw() {
 
-		GL11.glTranslated(-this.camera.x(), -this.camera.y(), this.camera.z());
-		
+		GL11.glTranslated(-Camera.x(), -Camera.y(), Camera.z());
 		for(Star star : this.stars) {
 			star.draw();
 		}
-		for(Asteroid asteroid: this.asteroids) {
-			asteroid.draw();
-		}
+
+		this.particleHandler.draw();
+
+		/*  -------------------------------  */
+		
 		for(Planet planet: this.planets) {
+			GL11.glLoadIdentity();
+			GL11.glTranslated(planet.x()-Camera.x(),planet.y()-Camera.y(),Camera.z()-planet.z());
 			planet.draw();
 		}
+		for(Asteroid asteroid: this.asteroids) {
+			GL11.glLoadIdentity();
+			GL11.glTranslated(asteroid.x()-Camera.x(),asteroid.y()-Camera.y(),Camera.z()-asteroid.z());
+			asteroid.draw();
+		}
 		this.player.draw();
-		this.particleHandler.draw();
 	}
 	
 	public void pollInput() {
-
+		Point mouse = new Point();
+		
 		/* Hiiren vasen nappi */
 		if (Mouse.isButtonDown(0)) {
 			System.out.println("MOUSE DOWN @ X: " + Mouse.getX() + " Y: " + Mouse.getY());
+			player.generateShip();
 		}
 		
 		/* Hiiren oikea nappi */
@@ -121,6 +125,7 @@ public class Game implements Drawable {
 			this.player.addForce(Force.towards(xp, yp), 0.002);
 			this.player.rotation = Math.atan2(yp, xp);
 			this.particleHandler.addParticle(new SmokeParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
+			this.particleHandler.addParticle(new PlayerTraceTrailParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
 		}
 	
 		/* game.player:n liikkuminen */
@@ -131,8 +136,14 @@ public class Game implements Drawable {
 
 		
 		/* kameran zoomtaso */
-		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) this.camera.moveZ( 0.5);
-		if (Keyboard.isKeyDown(Keyboard.KEY_E)) this.camera.moveZ(-0.5);
+		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) Camera.z(Camera.z()+0.05);
+		if (Keyboard.isKeyDown(Keyboard.KEY_E)) Camera.z(Camera.z()-0.05);
+		{
+			int dWheel = Mouse.getDWheel();
+			if (dWheel < 0)      Camera.z(Camera.z()+0.1);
+			else if (dWheel > 0) Camera.z(Camera.z()-0.1);
+			
+		}
 			
 
 		while (Keyboard.next()) {
