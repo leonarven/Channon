@@ -119,11 +119,14 @@ public class Game implements Drawable {
 		
 		/* Hiiren oikea nappi */
 		if (Mouse.isButtonDown(1)) {
-			double xp = 2.0*(double)Mouse.getX()/(double)Display.getWidth()-1.0;
-			double yp = 2.0*(double)Mouse.getY()/(double)Display.getHeight()-1.0;
-	
-			this.player.addForce(Force.towards(xp, yp), 0.002);
-			this.player.rotation = Math.atan2(yp, xp);
+			double xp = 2.0*(double)Mouse.getX()/(double)Display.getWidth()-1.0,
+			       yp = 2.0*(double)Mouse.getY()/(double)Display.getHeight()-1.0,
+			       ap = Math.atan2(yp, xp);
+			
+			this.player.rotation = ap;
+			this.player.addForce(new Force(Math.cos(this.player.rotation), Math.sin(this.player.rotation), 0.002));
+			
+			
 			this.particleHandler.addParticle(new SmokeParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
 			this.particleHandler.addParticle(new PlayerTraceTrailParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
 		}
@@ -140,8 +143,8 @@ public class Game implements Drawable {
 		if (Keyboard.isKeyDown(Keyboard.KEY_E)) Camera.z(Camera.z()-0.05);
 		{
 			int dWheel = Mouse.getDWheel();
-			if (dWheel < 0)      Camera.z(Camera.z()+0.1);
-			else if (dWheel > 0) Camera.z(Camera.z()-0.1);
+			if (dWheel < 0)      Camera.z(Camera.z()+0.3);
+			else if (dWheel > 0) Camera.z(Camera.z()-0.3);
 			
 		}
 			

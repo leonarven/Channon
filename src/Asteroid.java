@@ -23,12 +23,23 @@ public class Asteroid extends Entity {
 	}
 	
 	public void draw() {
-		GL11.glRotated(this.rotation, 0, 0, 1);
+		GL11.glRotated(Channon._t, 1, 1, 1);
 		super.draw();
 		GL11.glColor3d(1.0, 1.0, 1.0);
-		GL11.glBegin(GL11.GL_LINE_LOOP);
+		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+		
+		GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+		GL11.glVertex3d(0, 0, -this.size);
 		for(Point point : corners)
 			GL11.glVertex3d(point.x(), point.y(), point.z());
+		GL11.glEnd();
+		GL11.glVertex3d(corners.get(0).x(), corners.get(0).y(), corners.get(0).z());
+		
+		GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+		GL11.glVertex3d(0, 0, this.size);
+		for(Point point : corners)
+			GL11.glVertex3d(point.x(), point.y(), point.z());
+		GL11.glVertex3d(corners.get(0).x(), corners.get(0).y(), corners.get(0).z());
 		GL11.glEnd();
 	}
 	public void update() {

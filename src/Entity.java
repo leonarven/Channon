@@ -42,7 +42,7 @@ abstract class Entity extends Point implements Drawable {
 	public void draw() {
 		GL11.glLoadIdentity();
 		GL11.glTranslated(this.x()-Camera.x(),this.y()-Camera.y(),Camera.z()-this.z());	
-		GL11.glRotated(this.rotation, 0, 0, 1);	
+		GL11.glRotated(this.rotation*180.0/Math.PI, 0, 0, 1);	
 
 		if (Channon.DEBUG) {
 			GL11.glColor3d(1, 1, 0);

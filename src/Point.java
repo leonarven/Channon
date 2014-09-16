@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 
-public class Point {
+public class Point extends Point2D {
 	private double x;
 	private double y;
 	private double z;
@@ -14,6 +14,9 @@ public class Point {
 	}
 	Point(Point p) {
 		this(p.x(), p.y(), p.z());
+	}
+	Point(Point2D p) {
+		this(p.x(), p.y(), 0);
 	}
 	Point(double x, double y) {
 		this(x, y, 0);
@@ -32,16 +35,8 @@ public class Point {
 		pos(x, y, 0);
 	}
 
-	public double x() { return this.x; }
-	public double y() { return this.y; }
 	public double z() { return this.z; }
-	
-	public void x(double val) { this.x = val; }
-	public void y(double val) { this.y = val; }
 	public void z(double val) { this.z = val; }
-	
-	public void moveX(double val) { this.x += val; }
-	public void moveY(double val) { this.y += val; }
 	public void moveZ(double val) { this.z += val; }
 	
 

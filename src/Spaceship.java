@@ -81,6 +81,7 @@ public class Spaceship extends Entity {
 	
 	public void draw() {
 		super.draw();
+		GL11.glRotated(this.rotation*180.0/Math.PI, 0, 0 , 1);
 		GL11.glBegin(GL11.GL_LINES);
 		for(SpaceshipPoint p1 : this.vpoints) {
 			GL11.glColor4d(p1.red, p1.green, p1.blue, p1.alpha);
