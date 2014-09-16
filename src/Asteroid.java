@@ -15,6 +15,7 @@ public class Asteroid extends Entity {
 	Asteroid(double size, int cornersCount) {
 		Random rand = new Random();
 		this.size = size;
+		this.health = this.healthMax = this.size*100;
 		double a = this.size ;
 		cornersCount = Math.max(5, cornersCount);
 		
@@ -51,6 +52,14 @@ public class Asteroid extends Entity {
 			GL11.glVertex3d(point.x(), point.y(), point.z());
 		GL11.glVertex3d(corners.get(0).x(), corners.get(0).y(), corners.get(0).z());
 		GL11.glEnd();
+		
+		if (Channon.DEBUG) {
+			GL11.glColor3d(1,0,1);
+			GL11.glBegin(GL11.GL_LINE_LOOP);
+			for(double i = 0; i < 2*Math.PI; i+= Math.PI/100)
+				GL11.glVertex2d(Math.cos(i)*this.size, Math.sin(i)*this.size);
+			GL11.glEnd();
+		}
 	}
 	public void update() {
 		super.update();

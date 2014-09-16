@@ -41,7 +41,7 @@ public class Point extends Point2D {
 	
 
 	public double distance2D(Point p) {
-		return Math.sqrt(Math.pow(p.x() -this.x, 2) + Math.pow(p.y() -this.y, 2));
+		return Math.sqrt(Math.pow(p.x() -this.x(), 2) + Math.pow(p.y() -this.y(), 2));
 	}
 
 	public double angle2D(Point p) {
@@ -61,7 +61,7 @@ public class Point extends Point2D {
 		GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 		boolean result = GLU.gluProject((float) x, (float) y, (float) z, modelView, projection, viewport, screenCoords);
 		if (result)
-			return new Point2D((int)screenCoords.get(0), (int)screenCoords.get(1));
+			return new Point2D(screenCoords.get(0), screenCoords.get(1));
 		return null;
 	}
 	

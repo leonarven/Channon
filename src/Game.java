@@ -26,7 +26,7 @@ public class Game implements Drawable {
 
 		player = new Player();
 		player.pos(5*Math.cos(rand.nextInt()), 5*Math.sin(rand.nextInt()));
-	//	player.pos(1,1);
+
 		this.entities.add(player);
 
 		Camera.z(-10);
@@ -84,6 +84,10 @@ public class Game implements Drawable {
 
 		Camera.x(this.player.x());
 		Camera.y(this.player.y());
+		
+		for(Asteroid asteroid : this.asteroids) {
+			
+		}
 	}
 	
 	public void draw() {
@@ -127,7 +131,7 @@ public class Game implements Drawable {
 //			this.player.rotation -= (-ap+this.player.rotation)/10.0;
 			this.player.addForce(new Force(Math.cos(this.player.rotation), Math.sin(this.player.rotation), 0.002));
 			
-//			this.particleHandler.addParticle(new SmokeParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
+			this.particleHandler.addParticle(new SmokeParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
 //			this.particleHandler.addParticle(new PlayerTraceTrailParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
 		}
 	

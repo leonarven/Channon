@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
@@ -36,7 +37,11 @@ public class Spaceship extends Entity {
 	public HashMap<SpaceshipGunRank, Gun> guns = new HashMap<SpaceshipGunRank, Gun>();
 	public ArrayList<SpaceshipPoint> vpoints = new ArrayList<SpaceshipPoint>();
 
-	public Spaceship() {
+	public Spaceship(double size, double mass, double health) {
+		super();
+		this.size = size;
+		this.mass = mass;
+		this.health = this.healthMax = health;
 		generateShip();
 	}
 	
@@ -110,30 +115,21 @@ public class Spaceship extends Entity {
 				GL11.glVertex3d(Math.cos(p1.rad) * p1.r, Math.sin(p1.rad) * p1.r, 0);
 				GL11.glColor4d(p2.red, p2.green, p2.blue, p2.alpha);
 				GL11.glVertex3d(Math.cos(p2.rad) * p2.r, Math.sin(p2.rad) * p2.r, 0);
-}
+			}
 		}
 		GL11.glEnd();
-		/*		
-		GL11.glBegin(GL11.GL_LINES);
-		for(SpaceshipPoint p1 : this.vpoints) {
-			GL11.glColor4d(p1.red, p1.green, p1.blue, p1.alpha);
-			GL11.glVertex3d(this.x()+Math.cos(this.rotation + p1.rad) * p1.r, this.y()+Math.sin(this.rotation + p1.rad) * p1.r, 0);
-			GL11.glColor3d(1, 1, 1);
-			GL11.glVertex3d(this.x(), this.y(), 0);
-
-			for(SpaceshipPoint p2 : this.vpoints) {
-				GL11.glColor4d(p1.red, p1.green, p1.blue, p1.alpha);
-				GL11.glVertex3d(this.x()+Math.cos(this.rotation + p1.rad) * p1.r, this.y()+Math.sin(this.rotation + p1.rad) * p1.r, 0);
-				GL11.glColor4d(p2.red, p2.green, p2.blue, p2.alpha);
-				GL11.glVertex3d(this.x()+Math.cos(this.rotation + p2.rad) * p2.r, this.y()+Math.sin(this.rotation + p2.rad) * p2.r, 0);
-
-				GL11.glColor4d(p1.red, p1.green, p1.blue, p1.alpha);
-				GL11.glVertex3d(this.x()+Math.cos(this.rotation - p1.rad) * p1.r, this.y()+Math.sin(this.rotation - p1.rad) * p1.r, 0);
-				GL11.glColor4d(p2.red, p2.green, p2.blue, p2.alpha);
-				GL11.glVertex3d(this.x()+Math.cos(this.rotation - p2.rad) * p2.r, this.y()+Math.sin(this.rotation - p2.rad) * p2.r, 0);
-}
+		
+		for(Entry<SpaceshipGunRank, Gun> entry : this.guns.entrySet()) {
+			entry.getValue().draw();
 		}
-		GL11.glEnd();*/
+		
+		if (Channon.DEBUG) {
+			GL11.glColor3d(1,0,1);
+			GL11.glBegin(GL11.GL_LINE_LOOP);
+			for(double i = 0; i < 2*Math.PI; i+= Math.PI/100)
+				GL11.glVertex2d(Math.cos(i)*this.size, Math.sin(i)*this.size);
+			GL11.glEnd();
+		}
 	}
 	
 	public void move(double a) {

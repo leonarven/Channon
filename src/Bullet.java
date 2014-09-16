@@ -14,6 +14,7 @@ public class Bullet extends BulletPrototype {
 	
 	@Override
 	public void draw() {
+		GL11.glColor3d(1, 1, 1);
 		GL11.glBegin(GL11.GL_LINES);
 		GL11.glVertex3d(this.x(), this.y(), this.z());
 		GL11.glVertex3d(this.x()+this.xPlus, this.y()+this.yPlus, this.z());

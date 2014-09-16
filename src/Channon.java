@@ -25,7 +25,7 @@ public class Channon {
 
 	public static Game game;
 
-	public void init(int width, int height) {
+	static public void init(int width, int height) {
 		try {
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.create();
@@ -41,7 +41,7 @@ public class Channon {
 		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 	 
-		this.reshape();
+		reshape();
 		
 		Channon.game = new Game();
 		Channon.game.init();
@@ -56,33 +56,30 @@ public class Channon {
 		timer.scheduleAtFixedRate(Channon.updateFPS, 1000, 1000);
 	}
 
-	public void reshape() {
-		int height = Display.getHeight();
-		int width = Display.getWidth();
-		if (height == 0) height = 1;
-		float aspect = (float)width / height;
-		
-		GL11.glViewport(0, 0, width, height);
-		
+	static public void ready3D() {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GLU.gluPerspective(45.0f, aspect, 0.1f, 100.0f);
-//		GL11.glOrtho(-10.0 * aspect, 10.0 * aspect, -10.0, 10.0, 1.0, 100.0);
-	
+		GLU.gluPerspective(45.0f, (float)Display.getWidth() / Display.getHeight(), 0.1f, 100.0f);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glLoadIdentity();
+	}
+	static public void ready2D() {
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0, Display.getWidth(), 0, Display.getHeight(), -1, 1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		
-		GL11.glClearDepth(1.0f);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
-		GL11.glFrontFace(GL11.GL_CW);
-//		GL11.glCullFace(GL11.GL_FRONT);
-//		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glLoadIdentity();
-
 	}
 	
-	public void start() {
+	static public void reshape() {
+		int height = Display.getHeight();
+		int width = Display.getWidth();
+		GL11.glViewport(0, 0, width, height);
+		ready3D();
+	}
+	
+	static public void start() {
 
 
 		long time, startTime;
@@ -96,19 +93,24 @@ public class Channon {
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			
-			Channon.game.pollInput();
-			Channon.game.update();
-			Channon.game.draw();
+			game.pollInput();
+			game.update();
+
+			Channon.ready3D();
+			game.draw();
+
+			Channon.ready2D();
+			HUD.draw();
 			
+			/**/
 			Display.update();
 //			Display.sync(60);
 			
-			Channon._t++;
-			Channon._frames++;
+			_t++;
+			_frames++;
 
 			time = System.currentTimeMillis() - startTime;
-			Channon.speedFactor = time / 20.0;
-			
+			speedFactor = time / 20.0;
 		}
 		
 		Display.destroy();
@@ -116,8 +118,7 @@ public class Channon {
 	}
 	
 	public static void main(String[] argv) {
-		Channon channon = new Channon();
-		channon.init(1024, 768);
-		channon.start();
+		Channon.init(1024, 768);
+		Channon.start();
 	}
 }
