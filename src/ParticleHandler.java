@@ -3,20 +3,20 @@ import java.util.Iterator;
 
 
 public class ParticleHandler {
-	public ArrayList<Particle> particles = new ArrayList<Particle>();
-	public ArrayList<TraceTrailParticle> traceTrails = new ArrayList<TraceTrailParticle>();
+	static public ArrayList<Particle> particles = new ArrayList<Particle>();
+	static public ArrayList<TraceTrailParticle> traceTrails = new ArrayList<TraceTrailParticle>();
 	
-	public void addParticle(Particle particle) {
-		this.particles.add(particle);
+	static public void addParticle(Particle particle) {
+		particles.add(particle);
 	}
 	
-	public void draw() {
-		for(Particle particle : this.particles)
+	static public void draw() {
+		for(Particle particle : particles)
 			particle.draw();
 	}
 	
-	public void update() {
-		for(Iterator<Particle> i = this.particles.iterator(); i.hasNext();) {
+	static public void update() {
+		for(Iterator<Particle> i = particles.iterator(); i.hasNext();) {
 			Particle particle = i.next();
 			particle.update();
 			if (particle.life > particle.lifetime) i.remove();

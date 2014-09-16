@@ -50,7 +50,7 @@ public class Point extends Point2D {
 		return Math.atan2(deltaY, deltaX);
 	}
 	
-	public int[] screen2D() {
+	public Point2D screen2D() {
 		FloatBuffer screenCoords = BufferUtils.createFloatBuffer(4);
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
 		FloatBuffer modelView = BufferUtils.createFloatBuffer(16);
@@ -60,8 +60,8 @@ public class Point extends Point2D {
 		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projection);
 		GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 		boolean result = GLU.gluProject((float) x, (float) y, (float) z, modelView, projection, viewport, screenCoords);
-		if (result) 
-		    return new int[] { (int) screenCoords.get(0), (int) screenCoords.get(1) };
+		if (result)
+			return new Point2D((int)screenCoords.get(0), (int)screenCoords.get(1));
 		return null;
 	}
 	

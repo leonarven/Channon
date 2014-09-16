@@ -6,12 +6,18 @@ public class Player extends Spaceship {
 	public Player() {
 		super();
 		this.mass = 1;
+		this.guns.put(SpaceshipGunRank.PRIMARY, new Gun(BulletType.BULLET));
+	}
+	
+	public void shoot(SpaceshipGunRank rank) {
+		Gun gun = this.guns.get(rank);
+
+		if (gun == null) return;
+		gun.shoot();
 	}
 	
 	public void draw() {
 		super.draw();
-
-		Debug.println(this.rotation+"-");
 		GL11.glRotated(this.rotation, 1, 1, 1.0);
 		if (this.distance2D(new Point(0,0)) > 10) {
 			double aToOrigo = Math.atan2(-this.y(), -this.x());

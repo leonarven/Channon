@@ -7,8 +7,13 @@ import org.lwjgl.opengl.GL11;
 public class Asteroid extends Entity {
 	
 	public ArrayList<Point> corners;
+	public double xr;
+	public double yr;
+	public double zr;
+	public double rr;
 	
 	Asteroid(double size, int cornersCount) {
+		Random rand = new Random();
 		this.size = size;
 		double a = this.size ;
 		cornersCount = Math.max(5, cornersCount);
@@ -20,10 +25,15 @@ public class Asteroid extends Entity {
 			a += (new Random().nextDouble()-0.5)*0.2;
 		}
 		this.rotationPlus = new Random().nextDouble();
+		
+		this.xr = rand.nextDouble();
+		this.yr = rand.nextDouble();
+		this.zr = rand.nextDouble();
+		this.rr = rand.nextDouble();
 	}
 	
 	public void draw() {
-		GL11.glRotated(Channon._t, 1, 1, 1);
+		GL11.glRotated(Channon._t, this.xr, this.yr, this.zr);
 		super.draw();
 		GL11.glColor3d(1.0, 1.0, 1.0);
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
@@ -44,6 +54,6 @@ public class Asteroid extends Entity {
 	}
 	public void update() {
 		super.update();
-		this.rotation = Channon._t;
+		this.rotation = Channon._t/100.0;
 	}
 }

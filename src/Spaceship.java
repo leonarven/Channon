@@ -1,11 +1,11 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
 
 public class Spaceship extends Entity {
-	
 	class SpaceshipPoint {
 		double rad, r, red, green, blue, alpha;
 		SpaceshipPoint(double rad, double r, double red, double green, double blue, double alpha) {
@@ -32,7 +32,8 @@ public class Spaceship extends Entity {
 			return p;
 		}
 	}
-	
+
+	public HashMap<SpaceshipGunRank, Gun> guns = new HashMap<SpaceshipGunRank, Gun>();
 	public ArrayList<SpaceshipPoint> vpoints = new ArrayList<SpaceshipPoint>();
 
 	public Spaceship() {
@@ -81,7 +82,6 @@ public class Spaceship extends Entity {
 	
 	public void draw() {
 		super.draw();
-		GL11.glRotated(this.rotation*180.0/Math.PI, 0, 0 , 1);
 		GL11.glBegin(GL11.GL_LINES);
 		for(SpaceshipPoint p1 : this.vpoints) {
 			GL11.glColor4d(p1.red, p1.green, p1.blue, p1.alpha);

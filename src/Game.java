@@ -75,10 +75,12 @@ public class Game implements Drawable {
 		
 		for(Planet planet : this.planets) {
 			this.player.addForce(Force.gravitation(planet, player));
+			planet.update();
 		}
 		this.player.update();
 
-		this.particleHandler.update();
+		ParticleHandler.update();
+		BulletHandler.update();
 
 		Camera.x(this.player.x());
 		Camera.y(this.player.y());
@@ -90,8 +92,8 @@ public class Game implements Drawable {
 		for(Star star : this.stars) {
 			star.draw();
 		}
-
-		this.particleHandler.draw();
+		ParticleHandler.draw();
+		BulletHandler.draw();
 
 		/*  -------------------------------  */
 		
@@ -105,27 +107,27 @@ public class Game implements Drawable {
 			GL11.glTranslated(asteroid.x()-Camera.x(),asteroid.y()-Camera.y(),Camera.z()-asteroid.z());
 			asteroid.draw();
 		}
+		GL11.glLoadIdentity();
+		GL11.glTranslated(player.x()-Camera.x(),player.y()-Camera.y(),Camera.z()-player.z());
 		this.player.draw();
 	}
 	
 	public void pollInput() {
 		Point mouse = new Point();
+		double xp = 2.0*(double)Mouse.getX()/(double)Display.getWidth()-1.0,
+		       yp = 2.0*(double)Mouse.getY()/(double)Display.getHeight()-1.0,
+		       ap = Math.atan2(yp, xp);
 		
 		/* Hiiren vasen nappi */
 		if (Mouse.isButtonDown(0)) {
 			System.out.println("MOUSE DOWN @ X: " + Mouse.getX() + " Y: " + Mouse.getY());
-			player.generateShip();
 		}
 		
 		/* Hiiren oikea nappi */
 		if (Mouse.isButtonDown(1)) {
-			double xp = 2.0*(double)Mouse.getX()/(double)Display.getWidth()-1.0,
-			       yp = 2.0*(double)Mouse.getY()/(double)Display.getHeight()-1.0,
-			       ap = Math.atan2(yp, xp);
-			
 			this.player.rotation = ap;
+//			this.player.rotation -= (-ap+this.player.rotation)/10.0;
 			this.player.addForce(new Force(Math.cos(this.player.rotation), Math.sin(this.player.rotation), 0.002));
-			
 			
 			this.particleHandler.addParticle(new SmokeParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
 			this.particleHandler.addParticle(new PlayerTraceTrailParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
@@ -148,6 +150,8 @@ public class Game implements Drawable {
 			
 		}
 			
+		if (Keyboard.isKeyDown(Keyboard.KEY_R)) player.generateShip();
+
 
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKeyState()) {

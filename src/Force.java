@@ -61,8 +61,6 @@ public class Force {
 	
 
 	public void draw(Point p) {
-		GL11.glLoadIdentity();
-		GL11.glTranslated(p.x()-Camera.x(),p.y()-Camera.y(),Camera.z()-p.z());
 		GL11.glBegin(GL11.GL_LINE_LOOP);
 		GL11.glVertex3d(0,0,0);
 		GL11.glVertex3d(this.xPlus, this.yPlus, 0);
