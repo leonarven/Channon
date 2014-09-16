@@ -79,6 +79,17 @@ public class Spaceship extends Entity {
 		p.rad = 0;
 		vpoints.add(p);
 	}
+
+	public void shoot(SpaceshipGunRank rank, double a) {
+		Gun gun = this.guns.get(rank);
+		if (gun == null) return;
+		gun.shoot(new Point(this.x(), this.y(), this.z()), a);
+	}
+	public void shoot(SpaceshipGunRank rank) {
+		Gun gun = this.guns.get(rank);
+		if (gun == null) return;
+		gun.shoot(new Point(this.x(), this.y(), this.z()));
+	}
 	
 	public void draw() {
 		super.draw();

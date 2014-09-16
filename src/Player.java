@@ -6,14 +6,7 @@ public class Player extends Spaceship {
 	public Player() {
 		super();
 		this.mass = 1;
-		this.guns.put(SpaceshipGunRank.PRIMARY, new Gun(BulletType.BULLET));
-	}
-	
-	public void shoot(SpaceshipGunRank rank) {
-		Gun gun = this.guns.get(rank);
-
-		if (gun == null) return;
-		gun.shoot();
+		this.guns.put(SpaceshipGunRank.PRIMARY, new Gun(0, 0, 0, BulletType.BULLET));
 	}
 	
 	public void draw() {

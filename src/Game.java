@@ -98,22 +98,19 @@ public class Game implements Drawable {
 		/*  -------------------------------  */
 		
 		for(Planet planet: this.planets) {
-			GL11.glLoadIdentity();
-			GL11.glTranslated(planet.x()-Camera.x(),planet.y()-Camera.y(),Camera.z()-planet.z());
+			GL11.glLoadIdentity(); GL11.glTranslated(planet.x()-Camera.x(),planet.y()-Camera.y(),Camera.z()-planet.z());
 			planet.draw();
 		}
 		for(Asteroid asteroid: this.asteroids) {
-			GL11.glLoadIdentity();
-			GL11.glTranslated(asteroid.x()-Camera.x(),asteroid.y()-Camera.y(),Camera.z()-asteroid.z());
+			GL11.glLoadIdentity(); GL11.glTranslated(asteroid.x()-Camera.x(),asteroid.y()-Camera.y(),Camera.z()-asteroid.z());
 			asteroid.draw();
 		}
-		GL11.glLoadIdentity();
-		GL11.glTranslated(player.x()-Camera.x(),player.y()-Camera.y(),Camera.z()-player.z());
+		GL11.glLoadIdentity(); GL11.glTranslated(player.x()-Camera.x(),player.y()-Camera.y(),Camera.z()-player.z());
 		this.player.draw();
 	}
 	
 	public void pollInput() {
-		Point mouse = new Point();
+		Point2D mouse = new Point2D(Mouse.getX(), Mouse.getY());
 		double xp = 2.0*(double)Mouse.getX()/(double)Display.getWidth()-1.0,
 		       yp = 2.0*(double)Mouse.getY()/(double)Display.getHeight()-1.0,
 		       ap = Math.atan2(yp, xp);
@@ -121,6 +118,7 @@ public class Game implements Drawable {
 		/* Hiiren vasen nappi */
 		if (Mouse.isButtonDown(0)) {
 			System.out.println("MOUSE DOWN @ X: " + Mouse.getX() + " Y: " + Mouse.getY());
+			this.player.shoot(SpaceshipGunRank.PRIMARY, ap);
 		}
 		
 		/* Hiiren oikea nappi */
@@ -129,8 +127,8 @@ public class Game implements Drawable {
 //			this.player.rotation -= (-ap+this.player.rotation)/10.0;
 			this.player.addForce(new Force(Math.cos(this.player.rotation), Math.sin(this.player.rotation), 0.002));
 			
-			this.particleHandler.addParticle(new SmokeParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
-			this.particleHandler.addParticle(new PlayerTraceTrailParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
+//			this.particleHandler.addParticle(new SmokeParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
+//			this.particleHandler.addParticle(new PlayerTraceTrailParticle(player.x()+Math.cos(player.rotation+Math.PI)*0.2, player.y()+Math.sin(player.rotation+Math.PI)*0.2, player.z()));
 		}
 	
 		/* game.player:n liikkuminen */

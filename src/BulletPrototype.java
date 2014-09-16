@@ -4,8 +4,10 @@ abstract class BulletPrototype extends Point implements Drawable {
 	double yPlus;
 	double speed;
 	
-	public BulletPrototype(double speed) {
+	public BulletPrototype(double speed, double a) {
 		this.speed = speed;
+		this.xPlus = Math.cos(a) * this.speed;
+		this.yPlus = Math.sin(a) * this.speed;
 	}
 
 	public void update() {
