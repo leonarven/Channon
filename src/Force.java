@@ -14,6 +14,9 @@ public class Force {
 	public Force(double xp, double yp, double a) {
 		this(xp*a, yp*a);
 	}
+	public Force(double rad) {
+		this(Math.cos(rad), Math.sin(rad));
+	}
 	
 	public Force plus(Force f) {
 		return new Force(f.xPlus * Channon.speedFactor + this.xPlus, f.yPlus * Channon.speedFactor + this.yPlus);
@@ -60,11 +63,14 @@ public class Force {
 	
 	
 
-	public void draw(Point p) {
+	public void draw(Point p, double r) {
 		GL11.glBegin(GL11.GL_LINE_LOOP);
 		GL11.glVertex3d(0,0,0);
-		GL11.glVertex3d(this.xPlus, this.yPlus, 0);
+		GL11.glVertex3d(this.xPlus*r, this.yPlus*r, 0);
 		GL11.glEnd();
+	}
+	public void draw(Point p) {
+		draw(p, 1);
 	}
 	@Override
 	public String toString() {

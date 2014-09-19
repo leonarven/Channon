@@ -1,13 +1,17 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 
 public class ParticleHandler {
 	static public ArrayList<Particle> particles = new ArrayList<Particle>();
-	static public ArrayList<TraceTrailParticle> traceTrails = new ArrayList<TraceTrailParticle>();
+	static public HashMap<String, TraceTrailParticle> traceTrails = new HashMap<String, TraceTrailParticle>();
 	
 	static public void addParticle(Particle particle) {
 		particles.add(particle);
+	}
+	static public void addParticle(TraceTrailParticle particle) {
+		
 	}
 	
 	static public void draw() {

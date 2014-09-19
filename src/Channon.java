@@ -34,13 +34,7 @@ public class Channon {
 			System.exit(0);
 		}
  
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		GL11.glClearDepth(1.0f);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
-		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
-		GL11.glShadeModel(GL11.GL_SMOOTH);
-	 
+		initGL();
 		reshape();
 		
 		Channon.game = new Game();
@@ -54,6 +48,32 @@ public class Channon {
 		};
 		
 		timer.scheduleAtFixedRate(Channon.updateFPS, 1000, 1000);
+		timer.scheduleAtFixedRate(Debug.debugMSGTimer, 1000, 1000);
+	}
+	
+	static public void initGL() {
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		
+		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		GL11.glClearDepth(1.0f);
+		
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glCullFace(GL11.GL_BACK);
+
+		
 	}
 
 	static public void ready3D() {
@@ -77,30 +97,36 @@ public class Channon {
 		int width = Display.getWidth();
 		GL11.glViewport(0, 0, width, height);
 		ready3D();
+		ready2D();
 	}
 	
 	static public void start() {
 
-
+		Debug.initTimer("draw");
+		Debug.initTimer("update");
+		
 		long time, startTime;
 		while (!Channon.finished) {
 			startTime = System.currentTimeMillis();
 			
 			if (Display.isCloseRequested() || Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) Channon.finished = true;
 			
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);	
-			GL11.glLoadIdentity();
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			
+			Debug.startTimer("update");
 			game.pollInput();
 			game.update();
+			Debug.endTimer("update");
 
+			Debug.startTimer("draw");
+
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);	
+			GL11.glLoadIdentity();
+			
 			Channon.ready3D();
 			game.draw();
 
 			Channon.ready2D();
 			HUD.draw();
+			Debug.endTimer("draw");
 			
 			/**/
 			Display.update();
@@ -119,6 +145,7 @@ public class Channon {
 	
 	public static void main(String[] argv) {
 		Channon.init(1024, 768);
+		//Renderer.init();
 		Channon.start();
 	}
 }

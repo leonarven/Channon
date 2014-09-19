@@ -15,8 +15,7 @@ abstract class Entity extends Point implements Drawable {
 	public Entity() {
 		this.mov = new Force(0,0);
 		this.mass = 0;
-		this.health = 0;
-		this.healthMax = 0;
+		this.health = this.healthMax = 0;
 	}
 	
 	public void addForce(Force f) {
@@ -55,17 +54,36 @@ abstract class Entity extends Point implements Drawable {
 		screenCoordinates = this.screen2D();
 	}
 	
+	public boolean hits(Entity e) {
+		if (this.distance2D(e) < this.size+e.size) return true;
+		return false;
+	}
+	
 	public void draw() {
 		GL11.glLoadIdentity();
 		GL11.glTranslated(this.x()-Camera.x(),this.y()-Camera.y(),Camera.z()-this.z());	
-		GL11.glRotated(this.rotation*180.0/Math.PI, 0, 0, 1);	
-
+		
 		if (Channon.DEBUG) {
+			GL11.glColor3d(1,0,1);
+			GL11.glBegin(GL11.GL_LINE_LOOP);
+			for(double i = 0; i < 2*Math.PI; i+= Math.PI/100)
+				GL11.glVertex2d(Math.cos(i)*this.size, Math.sin(i)*this.size);
+			GL11.glEnd();
+
 			GL11.glColor3d(1, 1, 0);
-			this.mov.draw(this);
+			this.mov.draw(this,10);
 			
 			for(Force f : this.forces)
-				f.draw(this);
+				f.draw(this,10);
 		}
+		
+		GL11.glRotated(this.rotation*180.0/Math.PI, 0, 0, 1);	
+
+		GL11.glColor3d(1, 1, 0);
+		GL11.glBegin(GL11.GL_LINE_STRIP);
+		for(double i = 0; i < 2*Math.PI*(this.health/this.healthMax); i+= Math.PI/100)
+			GL11.glVertex2d(Math.cos(i)*(this.size+0.1), Math.sin(i)*(this.size+0.1));
+		GL11.glEnd();
+
 	}
 }
